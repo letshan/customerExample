@@ -1,0 +1,10 @@
+##############
+#config the qr code generator
+#
+#
+#qr code text = baseUrl?verifycode=XXXX-xxx
+###
+qrcode.text.baseUrl=
+qrcode.size.big=200
+qrcode.size.small=80
+qrcode.fileType=png

@@ -1,0 +1,100 @@
+package com.authmo.utils;
+
+import java.io.OutputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+
+import org.apache.log4j.Logger;
+import org.w3c.dom.Document;
+import org.xhtmlrenderer.pdf.ITextRenderer;
+
+import com.lowagie.text.DocumentException;
+
+/***
+ * generate pdf file
+ * 
+ * @author locus
+ * 
+ */
+public class PdfGenerator {
+	private static Logger logger = Logger.getLogger(PdfGenerator.class);
+  /****
+   * Generate a pdf from a html url.
+   * @param os
+   * @param baseUrl : the root url of the uri of the html that you want to convert to pdf
+   * @param uris : the array of uri list (html pages) that you want to convert into a single pdf
+   * @throws DocumentException
+   * @throws URLException
+   */
+	public static void generatePDF(OutputStream os, String baseUrl,
+			String... uris) throws DocumentException, URLException {
+
+		ITextRenderer renderer = new ITextRenderer();
+		URL bUrl = null;
+		try {
+			bUrl = baseUrl == null ? null : new URL(baseUrl);
+		} catch (MalformedURLException e) {
+			logger.info("BaseUrl to generate PDF is empty (" + baseUrl + ")");
+		}
+		URL url = null;
+		if (uris.length > 0) {
+			try {
+				url = bUrl == null ? new URL(uris[0]) : new URL(bUrl, uris[0]);
+			} catch (MalformedURLException e) {
+				throw new URLException("uri 0 " + uris[0] + " got problem", e);
+			}
+
+			renderer.setDocument(url.toString());
+			renderer.layout();
+			if (uris.length > 1) {
+				renderer.createPDF(os, false);
+
+				for (int i = 1; i < uris.length; i++) {
+					try {
+						url = bUrl == null ? new URL(uris[i]) : new URL(bUrl,
+								uris[i]);
+					} catch (MalformedURLException e) {
+						throw new URLException("uri " + i + " [" + uris[i]
+								+ "] got problem", e);
+					}
+					renderer.setDocument(url.toString());
+					renderer.layout();
+					renderer.writeNextDocument();
+
+				}
+				renderer.finishPDF();
+			} else {
+				// single html file
+				renderer.createPDF(os);
+			}
+		}
+
+	}
+	
+	public static void generatePDF(OutputStream os, String baseUrl,
+			Document... docs) throws DocumentException, URLException {
+
+			ITextRenderer renderer = new ITextRenderer(); 
+			if (docs.length > 0) {  
+				renderer.setDocument(docs[0], baseUrl);
+				renderer.layout();
+				if (docs.length > 1) {
+					renderer.createPDF(os, false);
+
+					for (int i = 1; i < docs.length; i++) {
+						 
+						renderer.setDocument(docs[i],baseUrl);
+						renderer.layout();
+						renderer.writeNextDocument();
+
+					}
+					renderer.finishPDF();
+				} else {
+					// single html file
+					renderer.createPDF(os);
+				}
+			}
+
+	}
+
+}

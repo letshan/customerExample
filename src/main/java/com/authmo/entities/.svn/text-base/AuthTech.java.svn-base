@@ -1,0 +1,75 @@
+package com.authmo.entities;
+
+import java.io.Serializable;
+import java.sql.Timestamp;
+import java.util.UUID;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "authtech")
+public class AuthTech implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4779525713109706665L;
+	
+	private UUID id; 
+	private Integer ownerId;
+	private Timestamp dateUpdate; 
+	private String maskedCode;
+	@Id
+	@Column(name="Id", columnDefinition = "BINARY(16)", length = 16 )
+	public UUID getId() {
+		return id;
+	}
+	public void setId(UUID id) {
+		this.id = id;
+	}
+	@Column(name="ownerId") 
+	public Integer getOwnerId() {
+		return ownerId;
+	}
+	public void setOwnerId(Integer ownerId) {
+		this.ownerId = ownerId;
+	}
+	@Column(name="dateUpdate")
+	public Timestamp getDateUpdate() {
+		return dateUpdate;
+	}
+	public void setDateUpdate(Timestamp dateUpdate) {
+		this.dateUpdate = dateUpdate;
+	}
+	@Column(name="maskedCode")
+	public String getMaskedCode(){
+		return this.maskedCode; 
+	}
+	public void setMaskedCode(String maskedCode){
+		this.maskedCode = maskedCode; 
+	}
+	@Override
+	public String toString(){
+		return "AuthTech:["+
+				"id="+id+ 
+				", ownerId="+ownerId+
+				", dateUpdate="+dateUpdate;
+	}
+	@Override
+	public boolean equals(Object o){
+		
+		if(o!=null && o instanceof AuthTech){
+			AuthTech that = (AuthTech)o;
+			if(that.id.equals(this.id)&&
+			   that.ownerId == this.ownerId &&
+			   ((that.dateUpdate==null&& this.dateUpdate==null)||that.dateUpdate.equals(this.dateUpdate))
+			){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+}

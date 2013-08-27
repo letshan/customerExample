@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/authtech/!svn/ver/20/branches/episode1/src/main/java/com/authmo/utils
+END
+URLException.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/authtech/!svn/ver/9/branches/episode1/src/main/java/com/authmo/utils/URLException.java
+END
+QRCodeGenerator.java
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/authtech/!svn/ver/8/branches/episode1/src/main/java/com/authmo/utils/QRCodeGenerator.java
+END
+StringUtil.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/authtech/!svn/ver/18/branches/episode1/src/main/java/com/authmo/utils/StringUtil.java
+END
+IpUtils.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/authtech/!svn/ver/20/branches/episode1/src/main/java/com/authmo/utils/IpUtils.java
+END
+TimeZoneUtils.java
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/authtech/!svn/ver/20/branches/episode1/src/main/java/com/authmo/utils/TimeZoneUtils.java
+END
+Base32.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/authtech/!svn/ver/18/branches/episode1/src/main/java/com/authmo/utils/Base32.java
+END
+PdfGenerator.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/authtech/!svn/ver/9/branches/episode1/src/main/java/com/authmo/utils/PdfGenerator.java
+END

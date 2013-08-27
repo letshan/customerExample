@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN"
+       "http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+
+<tiles-definitions>
+
+  <definition name="baseLayout" template="/WEB-INF/views/layout/layout.jsp">
+    <put-attribute name="bodyContent" value="" />
+    <put-attribute name="footerCopyright" value="/WEB-INF/views/copyright.jsp" />
+  </definition>
+  
+  <definition name="mobileLayout" template="/WEB-INF/views/layout/mobile_layout.jsp">
+    <put-attribute name="bodyContent" value="" />
+    <put-attribute name="footerCopyright" value="/WEB-INF/views/copyright.jsp" />
+  </definition>
+  
+  <definition name="welcome" extends="baseLayout">
+<!--   	<put-attribute name="bodyContent" value="/WEB-INF/views/welcome.jsp" /> -->
+<put-attribute name="bodyContent" value="/WEB-INF/views/authtech.jsp" />
+  </definition>
+  
+  <definition name="login" extends="baseLayout">
+  	<put-attribute name="bodyContent" value="/WEB-INF/views/login.jsp" />
+  </definition>  
+ <definition name="authtech" extends="baseLayout">
+  	<put-attribute name="bodyContent" value="/WEB-INF/views/authtech.jsp" />
+  </definition>
+    <definition name="validate/successed" extends="baseLayout">
+  	<put-attribute name="bodyContent" value="/WEB-INF/views/validate/successed.jsp" />
+  </definition> 
+    <definition name="validate/expired" extends="baseLayout">
+  	<put-attribute name="bodyContent" value="/WEB-INF/views/validate/expired.jsp" />
+  </definition> 
+    <definition name="validate/failed" extends="baseLayout">
+  	<put-attribute name="bodyContent" value="/WEB-INF/views/validate/failed.jsp" />
+  </definition> 
+  <!-- mobile pages -->
+   <definition name="mobile/authtech" extends="mobileLayout">
+  	<put-attribute name="bodyContent" value="/WEB-INF/views/mobile/authtech.jsp" />
+  </definition>
+    <definition name="mobile/validate/successed" extends="mobileLayout">
+  	<put-attribute name="bodyContent" value="/WEB-INF/views/mobile/successed.jsp" />
+  </definition> 
+    <definition name="mobile/validate/expired" extends="mobileLayout">
+  	<put-attribute name="bodyContent" value="/WEB-INF/views/mobile/expired.jsp" />
+  </definition> 
+    <definition name="mobile/validate/failed" extends="mobileLayout">
+  	<put-attribute name="bodyContent" value="/WEB-INF/views/mobile/authtech.jsp" />
+  </definition> 
+  
+  
+  <definition name="userhome" extends="baseLayout">
+  	<put-attribute name="bodyContent" value="/WEB-INF/views/userhome.jsp" />
+  </definition>  
+
+  <definition name="admin/adminhome" extends="baseLayout">
+  	<put-attribute name="bodyContent" value="/WEB-INF/views/admin/adminhome.jsp" />
+  	<put-attribute name="footerCopyright" value="/WEB-INF/views/admin/copyright.jsp" />
+  </definition>  
+
+
+  <definition name="admin/authtech_admin" extends="admin/adminhome">
+  	<put-attribute name="bodyContent" value="/WEB-INF/views/admin/authtech_admin.jsp" />
+  </definition>
+   <definition name="admin/stores" extends="admin/adminhome">
+  	<put-attribute name="bodyContent" value="/WEB-INF/views/admin/authtech_stores.jsp" />
+  </definition>
+     <definition name="admin/editstore" extends="admin/adminhome">
+  	<put-attribute name="bodyContent" value="/WEB-INF/views/admin/authtech_editstore.jsp" />
+  </definition> 
+  <definition name="admin/authtech_list" extends="admin/adminhome">
+  	<put-attribute name="bodyContent" value="/WEB-INF/views/admin/authtech_list.jsp" />
+  </definition>
+  <definition name="admin/authtech_generate" extends="admin/adminhome">
+  	<put-attribute name="bodyContent" value="/WEB-INF/views/admin/authtech_generate.jsp" />
+  </definition>
+  
+  <definition name="admin/authtech_download" extends="admin/adminhome">
+  	<put-attribute name="bodyContent" value="/WEB-INF/views/admin/authtech_download.jsp" />
+  </definition>
+  
+  
+  
+</tiles-definitions>

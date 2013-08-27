@@ -1,0 +1,65 @@
+package com.authmo.service;
+
+import java.io.IOException;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.authmo.entities.UserClientInfo;
+import com.authmo.web.config.Config;
+import com.authmo.web.config.ConfigException;
+
+import com.maxmind.geoip.*;
+
+@SuppressWarnings("restriction")
+@Service("geoLocateService")
+public class GeoLocateService {
+	@Autowired
+	private Config config;
+	private LookupService cl;
+ 
+	@PostConstruct
+	/****
+	 * Init the GeoIP data settings.
+	 */
+	public void init() throws ConfigException, IOException{
+ 		String datLocation = config.getValue(config.geoIpDat);
+ 		cl = new LookupService(datLocation,LookupService.GEOIP_MEMORY_CACHE );
+	} 
+	@PreDestroy
+	public void destroy(){
+		if(cl!=null){
+			cl.close();
+			cl = null;
+		}
+	}
+	/***
+	 * 
+	 * @param ip
+	 * @return userClient info
+	 */
+	public UserClientInfo getUserClientInfoByIP(String ip){
+		Location l1 = cl.getLocation(ip);
+		UserClientInfo uif = null;
+		if(l1!=null){ 
+			uif = new UserClientInfo();
+			uif.setIp(ip);
+			uif.setCity(l1.city);
+			uif.setArea_code(l1.area_code);
+			uif.setCountryCode(l1.countryCode);
+			uif.setCountryName(l1.countryName);
+			uif.setRegion(l1.region);
+			uif.setRegionName(regionName.regionNameByCode(l1.countryCode,l1.region));
+			uif.setPostalCode(l1.postalCode);
+			uif.setLatitude(l1.latitude);
+			uif.setLongitude(l1.longitude);
+			uif.setMetro_code(l1.metro_code); 
+			uif.setTimeZoneName(timeZone.timeZoneByCountryAndRegion(l1.countryCode, l1.region)); 
+			uif.setDma_code(l1.dma_code);			
+		}
+		return uif;
+	}
+}

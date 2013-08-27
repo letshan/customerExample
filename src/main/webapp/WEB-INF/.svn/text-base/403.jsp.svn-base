@@ -1,0 +1,79 @@
+<%@ include file="views/taglib.jsp" %>
+<!DOCTYPE html><html lang="en">
+<head>
+	<title>AuthTech</title>
+	<link type="text/css" href='<spring:url value="/resources/css/style.css"/>' rel="stylesheet" />
+	<link type="text/css" href='<spring:url value="/resources/css/clock.css"/>' rel="stylesheet" />
+	<link type="text/css" href='<spring:url value="/resources/jquery/css/redmond/jquery-ui-1.8.21.custom.css"/>' rel="stylesheet" />	
+	<script type="text/javascript" src='<spring:url value="/resources/jquery/js/jquery-1.7.2.min.js"/>'></script>
+	<script type="text/javascript" src='<spring:url value="/resources/jquery/js/jquery-ui-1.8.21.custom.min.js"/>'></script>
+	<script  type="text/javascript"  src='<spring:url value="/resources/js/authtechclock.js"/>' type="text/javascript" ></script>
+	<script>
+ 
+	 $(document).ready(function(){
+		 JBCountDown({
+		 secondsColor : "#ffdc50",
+		 secondsGlow : "none",
+		 minutesColor : "#9cdb7d",
+		 minutesGlow : "none",
+		 hoursColor : "#378cff",
+		 hoursGlow : "none",
+		 daysColor : "#ff6565",
+		 daysGlow : "none",		 
+		 endtime: ${time_to_over}<c:if test="${empty time_to_over}">3600</c:if>,		 
+		 seconds : "20"
+		 });
+		 }); 
+	</script> 
+		
+</head>
+<body>
+<div>
+<header><h1>Your requests are temporarily unavailable!</h1></header>
+        <h4>We will be back in:</h4>
+        <div class="clock">
+      
+            <!-- Hours -->
+            <div class="clock_hours">
+                <div class="bgLayer">
+                    <div class="topLayer"></div>
+                    <canvas id="canvas_hours" width="188" height="188">
+                    </canvas>
+                    <div class="text">
+                        <p class="val">1</p>
+                        <p class="type_hours">Hours</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Hours -->
+            <!-- Minutes -->
+            <div class="clock_minutes">
+                <div class="bgLayer">
+                    <div class="topLayer"></div>
+                    <canvas id="canvas_minutes" width="188" height="188">
+                    </canvas>
+                    <div class="text">
+                        <p class="val">16</p>
+                        <p class="type_minutes">Minutes</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Minutes -->
+            <!-- Seconds -->
+            <div class="clock_seconds">
+                <div class="bgLayer">
+                    <div class="topLayer"></div>
+                    <canvas id="canvas_seconds" width="188" height="188">
+                    </canvas>
+                    <div class="text">
+                        <p class="val">45</p>
+                        <p class="type_seconds">Seconds</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Seconds -->
+        </div>
+         
+        
+</body>
+</html>

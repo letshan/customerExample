@@ -1,0 +1,23 @@
+Application.Title=AuthTech Prototype
+title.welcome=Wo cao
+
+authtech.message.fail=The {0} you have entered <br /> does not match our record.
+authtech.messageDetail.fail=<ul><li><span>Try again. Make sure the {0} is correctly entered.</span></li><li><span>You may have purchased a counterfeit product, please contact your place of purchase.</span></li></ul>
+
+authtech.message.validated=The {0} has already been validated on <br />{1}
+authtech.messageDetail.validated=<ul><li><span>Have you validated this code at above date? If not...</span></li><li><span>You may have purchased a counterfeit product,	please contact your place of purchase.</span></li></ul>
+
+authtech.message.recaptcha.incorrect=Incorrect reCaptcha Code <br> Please try again!
+
+authtech.message.success=Congratulations! Your product is geniune.
+authtech.messageDetail.success=The {0} you have entered matches our record. Thank you for purchasing our product.
+authtech.message.banned=Tried too many times; your request will be denied to serve for 30 mins 
+
+authtech.mobile.messageDetail.fail=<ul><li><span>Try again. Make sure the {0} is correctly scanned.</span></li><li><span>You may have purchased a counterfeit product, please contact your place of purchase.</span></li></ul>
+
+default.copyright=Copyright &copy; 2013 <strong>Purelea</strong>. All Rights Reserved. <a href="#">Terms of Use</a> &bull; <a href="#">Privacy Policy</a>
+
+default.copyright.marianas=Copyright &#169; 2013 <strong>Marianas Group</strong>. All Rights Reserved. <a href="#">Terms of Use</a> &#8226; <a href="#">Privacy Policy</a>
+
+mobile.copyright=Copyright &copy; 2013 <strong>Purelea</strong>. All Rights Reserved. <a href="#">Terms of Use</a> &bull; <a href="#">Privacy Policy</a>
+mobile.copyright.marianas=Copyright &#169; 2013 <strong>Marianas Group</strong>. All Rights Reserved. <a href="#">Terms of Use</a> &#8226; <a href="#">Privacy Policy</a>

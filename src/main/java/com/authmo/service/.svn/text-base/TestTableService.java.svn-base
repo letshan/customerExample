@@ -1,0 +1,19 @@
+package com.authmo.service;
+
+import java.util.List;
+
+import com.authmo.entities.TestTable;
+
+public interface TestTableService {
+	List<TestTable> getAll();
+
+	TestTable getById(Integer id);
+
+	TestTable saveOrUpdate(TestTable tb);
+
+	void delete(TestTable tb);
+
+	void deleteAll();
+
+	Integer count();
+}

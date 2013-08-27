@@ -1,0 +1,8 @@
+jdbc.driverClassName=com.mysql.jdbc.Driver
+jdbc.url=jdbc:mysql://database:3306/authtech
+jdbc.username=authtech
+jdbc.password=@uthTech
+ 
+hibernate.hbm2ddl.auto=false
+hibernate.dialect=org.hibernate.dialect.MySQLDialect
+hibernate.show_sql=true

@@ -1,0 +1,17 @@
+jdbc.driverClassName=com.mysql.jdbc.Driver
+#dev database
+jdbc.url=jdbc:mysql://database:3306/authtech
+#production database
+#jdbc.url=jdbc:mysql://localhost:3306/authtech
+jdbc.username=authtech
+jdbc.password=@uthTech
+
+hibernate.hbm2ddl.auto=false
+hibernate.dialect=org.hibernate.dialect.MySQLDialect
+hibernate.show_sql=true
+#this is only for google app engine
+#javax.persistence.jdbc.driver=com.google.appengine.api.rdbms.AppEngineDriver
+#javax.persistence.jdbc.url=jdbc:google:rdbms://authtech-genuee/authtech
+#jdbc.driverClassName=com.google.appengine.api.rdbms.AppEngineDriver
+#jdbc.url=jdbc:google:rdbms://authtech-genuee/authtech
+#hibernate.connection.pool_size=0

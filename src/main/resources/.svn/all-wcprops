@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/authtech/!svn/ver/20/branches/episode1/src/main/resources
+END
+messages.properties
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/authtech/!svn/ver/20/branches/episode1/src/main/resources/messages.properties
+END
+qrcode.properties
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/authtech/!svn/ver/20/branches/episode1/src/main/resources/qrcode.properties
+END
+log4j.properties
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/authtech/!svn/ver/3/branches/episode1/src/main/resources/log4j.properties
+END
+hibernate.properties
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/authtech/!svn/ver/15/branches/episode1/src/main/resources/hibernate.properties
+END

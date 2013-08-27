@@ -1,0 +1,16 @@
+package com.authmo.repository;
+
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.authmo.entities.OwnerStore;
+ 
+
+@Repository
+@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+public class OwnerStoreDao extends AbstractJpaDAO<OwnerStore> {
+	public OwnerStoreDao(){
+		super(OwnerStore.class);
+	}
+}

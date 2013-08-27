@@ -1,0 +1,32 @@
+package com.authmo.service;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.authmo.entities.OwnerStore;
+import com.authmo.repository.OwnerStoreDao;
+
+@Service("ownerstoreService")
+public class OwnerStoreService {
+	@Autowired
+	private OwnerStoreDao ownerstoreDao; 
+	
+	public OwnerStore getById(int id){
+		return (OwnerStore)ownerstoreDao.getById(new Integer(id));
+		 
+	}
+	public List<OwnerStore> getAllStores(){
+		return (List<OwnerStore>)ownerstoreDao.getAll();
+	}
+	
+	public OwnerStore saveStore(OwnerStore store){
+		if(store!=null&& store.getId()!=null && store.getId()>0){
+			ownerstoreDao.update(store);
+		}else{
+			ownerstoreDao.create(store);
+		}
+		return store;
+	}
+}

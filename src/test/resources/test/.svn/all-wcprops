@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/authtech/!svn/ver/19/branches/episode1/src/test/resources/test
+END
+spring-context.xml
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/authtech/!svn/ver/19/branches/episode1/src/test/resources/test/spring-context.xml
+END
+hibernate.properties
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/authtech/!svn/ver/19/branches/episode1/src/test/resources/test/hibernate.properties
+END

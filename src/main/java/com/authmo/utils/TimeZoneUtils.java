@@ -1,0 +1,36 @@
+package com.authmo.utils;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.sql.Timestamp;
+
+import javax.servlet.http.HttpServletRequest;
+ 
+public class TimeZoneUtils { 
+	
+	public static String formatDateTime(DateFormat df, Date date){
+		if(df==null){
+			df = new SimpleDateFormat();			
+		}
+		return df.format(date);
+	}
+	public static String formatDateTime(DateFormat df, Object date){
+		if(df==null){
+			df = new SimpleDateFormat();			
+		}
+		return df.format(date);
+	} 
+	 
+	public static void main(String[] args){
+		System.out.println("Date Time Util");
+		long current = System.currentTimeMillis();
+		Timestamp tp = new Timestamp(current);
+		System.out.println("local current  = "+current); 
+		System.out.println("Timestamp="+tp);
+		SimpleDateFormat sdf= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss zzz");
+        sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
+        System.out.println("UTC format:"+sdf.format(tp));
+        sdf.setTimeZone(TimeZone.getDefault());
+        System.out.println("Default format:"+sdf.format(tp));
+	}
+}

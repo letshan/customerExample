@@ -1,0 +1,26 @@
+package com.authmo;
+
+import junit.framework.Assert;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import com.authmo.entities.OwnerStore;
+import com.authmo.service.OwnerStoreService;
+
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration("classpath:test/spring-context.xml")
+public class OwnerStoreTest {
+	@Autowired
+	private OwnerStoreService service;
+	@Test
+	public void testGetOwnerStore(){
+//		OwnerStore marianas = service.getById(1);
+//		Assert.assertNotNull("OwnerStore null",marianas);
+//		Assert.assertEquals("marianas", marianas.getSkin() );
+	}
+
+}

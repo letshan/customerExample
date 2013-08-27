@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/authtech/!svn/ver/21/branches/episode1/src/main/java/com/authmo/repository
+END
+AbstractJpaDAO.java
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/authtech/!svn/ver/20/branches/episode1/src/main/java/com/authmo/repository/AbstractJpaDAO.java
+END
+TestTableRepository.java
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/authtech/!svn/ver/3/branches/episode1/src/main/java/com/authmo/repository/TestTableRepository.java
+END
+AuthTechDao.java
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/authtech/!svn/ver/19/branches/episode1/src/main/java/com/authmo/repository/AuthTechDao.java
+END
+TestTableRepositoryImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/authtech/!svn/ver/19/branches/episode1/src/main/java/com/authmo/repository/TestTableRepositoryImpl.java
+END
+OwnerStoreDao.java
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/authtech/!svn/ver/19/branches/episode1/src/main/java/com/authmo/repository/OwnerStoreDao.java
+END

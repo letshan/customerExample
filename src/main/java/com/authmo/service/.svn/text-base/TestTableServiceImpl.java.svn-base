@@ -1,0 +1,45 @@
+package com.authmo.service;
+
+import java.util.List;
+
+import com.authmo.entities.TestTable;
+import com.authmo.repository.TestTableRepository;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+@Service("testTableService")
+@Transactional(propagation = Propagation.REQUIRED)
+public class TestTableServiceImpl implements TestTableService {
+	@Autowired
+	private TestTableRepository testRepository;
+
+	public List<TestTable> getAll() {
+		return testRepository.getAll();
+	}
+ 
+	public TestTable getById(Integer id) {
+		return testRepository.getById(id);
+	}
+ 
+	public TestTable saveOrUpdate(TestTable tb) {
+		return testRepository.saveOrUpdate(tb);
+	}
+ 
+	public void delete(TestTable tb) {
+		testRepository.delete(tb);
+	} 
+	public void deleteAll() {
+		testRepository.deleteAll(getAll() );
+
+	}
+ 
+	public Integer count() {
+		return testRepository.count();
+	}
+
+}

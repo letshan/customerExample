@@ -1,0 +1,110 @@
+package com.authmo.entities;
+
+import java.io.Serializable;
+
+ 
+/***
+ * encapsulate the GeoIP API Location class
+ * @author locus
+ *
+ */
+public class UserClientInfo  implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -154176788199514970L;
+	
+	private String countryCode;
+	private String countryName;
+	private String region;
+	private String city;
+    private String postalCode;
+    private float latitude;
+    private float longitude;
+    private int dma_code;
+    private int area_code;
+    private int metro_code;
+    private String regionName;
+    private String timeZoneName;
+
+	private String ip;
+    
+	public String getCountryCode() {
+		return countryCode;
+	}
+	public void setCountryCode(String countryCode) {
+		this.countryCode = countryCode;
+	}
+	public String getCountryName() {
+		return countryName;
+	}
+	public void setCountryName(String countryName) {
+		this.countryName = countryName;
+	}
+	public String getRegion() {
+		return region;
+	}
+	public void setRegion(String region) {
+		this.region = region;
+	}
+	public String getCity() {
+		return city;
+	}
+	public void setCity(String city) {
+		this.city = city;
+	}
+	public String getPostalCode() {
+		return postalCode;
+	}
+	public void setPostalCode(String postalCode) {
+		this.postalCode = postalCode;
+	}
+	public float getLatitude() {
+		return latitude;
+	}
+	public void setLatitude(float latitude) {
+		this.latitude = latitude;
+	}
+	public float getLongitude() {
+		return longitude;
+	}
+	public void setLongitude(float longitude) {
+		this.longitude = longitude;
+	}
+	public int getDma_code() {
+		return dma_code;
+	}
+	public void setDma_code(int dma_code) {
+		this.dma_code = dma_code;
+	}
+	public int getArea_code() {
+		return area_code;
+	}
+	public void setArea_code(int area_code) {
+		this.area_code = area_code;
+	}
+	public int getMetro_code() {
+		return metro_code;
+	}
+	public void setMetro_code(int metro_code) {
+		this.metro_code = metro_code;
+	}
+	public String getRegionName() {
+		return regionName;
+	}
+	public void setRegionName(String regionName) {
+		this.regionName = regionName;
+	}
+	public String getTimeZoneName() {
+		return timeZoneName;
+	}
+	public void setTimeZoneName(String timeZoneName) {
+		this.timeZoneName = timeZoneName;
+	}
+	public void setIp(String ip) {
+		this.ip = ip;		
+	}
+	public String getIp() {
+		return ip;
+	} 
+}

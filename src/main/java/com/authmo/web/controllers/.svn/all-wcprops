@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/authtech/!svn/ver/19/branches/episode1/src/main/java/com/authmo/web/controllers
+END
+MainController.java
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/authtech/!svn/ver/19/branches/episode1/src/main/java/com/authmo/web/controllers/MainController.java
+END
+AuthTechController.java
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/authtech/!svn/ver/19/branches/episode1/src/main/java/com/authmo/web/controllers/AuthTechController.java
+END
+AuthTechAdminController.java
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/svn/authtech/!svn/ver/15/branches/episode1/src/main/java/com/authmo/web/controllers/AuthTechAdminController.java
+END

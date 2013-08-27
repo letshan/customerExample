@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jee="http://www.springframework.org/schema/jee" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:util="http://www.springframework.org/schema/util" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop 
+		http://www.springframework.org/schema/aop/spring-aop-3.1.xsd
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/jee 
+		http://www.springframework.org/schema/jee/spring-jee-2.5.xsd
+		http://www.springframework.org/schema/util 
+		http://www.springframework.org/schema/util/spring-util-3.1.xsd
+		http://www.springframework.org/schema/mvc 
+		http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
+
+	<context:annotation-config />
+
+	<context:component-scan base-package="com.authmo"
+		use-default-filters="false">
+		<context:include-filter type="annotation"
+			expression="org.springframework.stereotype.Controller" />
+	</context:component-scan>
+
+	<mvc:annotation-driven />
+
+<!-- 	<bean id="userAccess" class="com.authmo.web.UserAccess" scope="session"> -->
+ 		<!-- this next element effects the proxying of the surrounding bean -->  
+<!-- 		<aop:scoped-proxy /> -->
+<!-- 	</bean> -->
+
+	<mvc:resources location="/resources/" mapping="/resources/**" />
+
+	<!-- <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver"> 
+		<property name="prefix" value="/WEB-INF/views/"/> <property name="suffix" 
+		value=".jsp"/> </bean> -->
+
+	<!-- Tiles Configuration -->
+
+
+	<bean class="org.springframework.web.servlet.view.tiles2.TilesConfigurer"
+		id="tilesConfigurer">
+		<property name="definitions">
+			<list>
+				<value>/WEB-INF/tiles-defs.xml</value>
+			</list>
+		</property>
+	</bean>
+
+	
+
+	<bean id="messageSource"
+		class="org.springframework.context.support.ResourceBundleMessageSource">
+		<property name="basename" value="messages"></property>
+	</bean>
+
+
+
+	<bean id='viewResolver'
+		class='org.springframework.web.servlet.view.ContentNegotiatingViewResolver'>
+		<property name="mediaTypes">
+			<map>
+				<entry key="atom" value="application/atom+xml"/>
+				<entry key="htm" value="text/html;charset=UTF-8"/>
+				<entry key="xls" value="application/vnd.ms-excel"/>
+				<entry key="xml" value="application/xml"/>
+				<entry key="txt" value="text/plain"/>
+				<entry key="json" value="application/json"/>
+				<entry key="pdf" value="application/pdf"/>
+			</map>
+		</property>
+		<property name="viewResolvers">
+			<list>
+			<bean class="org.springframework.web.servlet.view.UrlBasedViewResolver"
+					id="tilesViewResolver" 
+					p:contentType="text/html;charset=UTF-8"
+					p:viewClass="org.springframework.web.servlet.view.tiles2.TilesView" />
+				
+				<bean class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver"
+					p:viewClass='com.authmo.web.servlet.views.FixedFreeMarkerView'
+					p:contentType="text/plain"
+					p:exposeSpringMacroHelpers='true'
+				    p:suffix=".ftl"/>
+ 
+				<bean class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver"
+					p:viewClass='com.authmo.web.servlet.views.FixedFreeMarkerView'
+					p:contentType="application/vnd.ms-excel"
+					p:exposeSpringMacroHelpers='true'
+				    p:suffix=".ftl"/>
+<!-- 				<bean class="com.authmo.web.servlet.views.HTML2PDFViewResolver" -->
+					<bean class="com.authmo.web.servlet.views.HTMLQRCode2PDFViewResolver"
+					p:template='/WEB-INF/xsl/html.xsl'>
+					<property name="viewResolver">
+						<bean
+						    class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver"
+							p:viewClass='com.authmo.web.servlet.views.FixedFreeMarkerView'
+							p:exposeSpringMacroHelpers='true' p:suffix=".ftl"/>
+					</property>
+				</bean>
+				 
+			</list>
+		</property>
+		<property name="defaultViews">
+			<list> 
+			<bean class="org.springframework.web.servlet.view.tiles2.TilesView" 
+				p:url="/WEB-INF/tiles-defs.xml"	/>
+				<bean
+					class="org.springframework.web.servlet.view.json.MappingJacksonJsonView" />
+
+			</list>
+		</property>
+	</bean>
+	
+		<bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer"
+		p:configuration-ref="freemarkerConfiguration"/>	
+		
+	<bean id="freemarkerBeansWrapper" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean"
+		p:staticMethod='freemarker.ext.beans.BeansWrapper.getDefaultInstance'>
+	</bean>  
+	
+	<bean id="freemarkerConfiguration" class="org.springframework.ui.freemarker.FreeMarkerConfigurationFactoryBean"
+		p:templateLoaderPath="/WEB-INF/views/">
+		<property name="freemarkerSettings">
+			<props>
+				<prop key="tag_syntax">square_bracket</prop>
+				<prop key="auto_include">taglib.ftl</prop>
+				<prop key="output_encoding">UTF-8</prop>
+				<prop key="object_wrapper">freemarker.ext.beans.BeansWrapper</prop>
+				<prop key="date_format">MM/dd/yyyy</prop>
+				<prop key="time_format">hh:mm:ss a</prop>
+				<prop key="datetime_format">MM/dd/yyyy hh:mm:ss a</prop>
+				<prop key="number_format">computer</prop>
+			</props>
+		</property>
+		<property name="freemarkerVariables">
+			<map>
+				<entry key="statics">
+					<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean"
+						p:targetObject-ref='freemarkerBeansWrapper' p:targetMethod='getStaticModels'>
+					</bean>  
+				</entry>
+				<entry key="enums">
+					<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean"
+						p:targetObject-ref='freemarkerBeansWrapper' p:targetMethod='getEnumModels'>
+					</bean>  
+				</entry>
+			</map>
+		</property>
+	</bean>
+<!-- 	<bean id="userAccess" class="com.authmo.web.UserAccess" scope="session"> -->
+<!-- 		<aop:scoped-proxy/> -->
+<!-- 	</bean> --> 
+	 
+</beans>

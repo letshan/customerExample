@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/authtech/!svn/ver/21/branches/episode1/src/main/java/com/authmo/service
+END
+AuthTechService.java
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/authtech/!svn/ver/20/branches/episode1/src/main/java/com/authmo/service/AuthTechService.java
+END
+TestTableService.java
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/authtech/!svn/ver/3/branches/episode1/src/main/java/com/authmo/service/TestTableService.java
+END
+OwnerStoreService.java
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/authtech/!svn/ver/15/branches/episode1/src/main/java/com/authmo/service/OwnerStoreService.java
+END
+TestTableServiceImpl.java
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svn/authtech/!svn/ver/3/branches/episode1/src/main/java/com/authmo/service/TestTableServiceImpl.java
+END
+GeoLocateService.java
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/authtech/!svn/ver/20/branches/episode1/src/main/java/com/authmo/service/GeoLocateService.java
+END

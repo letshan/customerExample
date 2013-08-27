@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/authtech/!svn/ver/20/branches/episode1/src/main/webapp/WEB-INF
+END
+dispatcher-servlet.xml
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/authtech/!svn/ver/9/branches/episode1/src/main/webapp/WEB-INF/dispatcher-servlet.xml
+END
+functions.tld
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/authtech/!svn/ver/20/branches/episode1/src/main/webapp/WEB-INF/functions.tld
+END
+applicationContext-security.xml
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/authtech/!svn/ver/20/branches/episode1/src/main/webapp/WEB-INF/applicationContext-security.xml
+END
+web.xml
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/authtech/!svn/ver/20/branches/episode1/src/main/webapp/WEB-INF/web.xml
+END
+tiles-defs.xml
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/authtech/!svn/ver/15/branches/episode1/src/main/webapp/WEB-INF/tiles-defs.xml
+END
+403.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/authtech/!svn/ver/5/branches/episode1/src/main/webapp/WEB-INF/403.jsp
+END
+logging.properties
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/authtech/!svn/ver/3/branches/episode1/src/main/webapp/WEB-INF/logging.properties
+END
+index.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/authtech/!svn/ver/3/branches/episode1/src/main/webapp/WEB-INF/index.jsp
+END

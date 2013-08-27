@@ -1,0 +1,122 @@
+package com.authmo;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith; 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import com.authmo.entities.AuthTech;
+import com.authmo.entities.AuthTechValidateResult;
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration("classpath:test/spring-context.xml")
+public class UUIDTest {
+	@Autowired
+	private com.authmo.service.AuthTechService service;
+	int ownerId =1;
+//	@Test
+//	public void testGenerateUuid(){
+//		System.out.println("TestGenereateUuid()");
+//		long start = System.currentTimeMillis();
+//		UUID uid = null;
+//		uid = UUID.randomUUID();
+//		for(int i=0;i<10000000;i++){
+//			uid = UUID.randomUUID();
+//			if(i%10000==0){
+//				System.out.println("="+uid);
+//				System.out.println("least:"+uid.getLeastSignificantBits());
+//				System.out.println("most:"+uid.getMostSignificantBits());
+//			}
+//		//uid.get
+//		}
+//		System.out.println("Time used:"+(System.currentTimeMillis()-start));
+//		
+//	}
+//	@Test
+//	public void testSaveUuidList(){
+//		List<UUID> uidList = new ArrayList<UUID>() ;
+//		for(int i=0;i<10000000;i++){
+//			uidList.add( UUID.randomUUID());
+//		}
+//		int ownerId = 1;
+//		System.out.println("testSaveUuidList()");
+//		long start = System.currentTimeMillis();
+//		service.saveGeneratedAuthTechs(ownerId, uidList);
+//		System.out.println("Time used:"+(System.currentTimeMillis()-start));
+//	}
+//	@Test
+//	public void testSaveUuid(){
+//		  
+//		System.out.println("testSaveUuid()");
+//		long start = System.currentTimeMillis();
+//		AuthTech au = new AuthTech();
+//		au.setId(UUID.randomUUID());
+//		au.setOwnerId(ownerId);
+//		System.out.println("saving "+au);
+//		service.save(au);
+//		System.out.println("Time used:"+(System.currentTimeMillis()-start));
+//		AuthTech saved = service.getById(au.getId());
+//		Assert.assertNotNull("fuck",saved);
+//	}
+	@Test
+	public void testSearchUuid(){
+		System.out.println("testSearchUuid()");
+		AuthTech au = new AuthTech();
+		au.setId(UUID.randomUUID());
+		au.setOwnerId(ownerId);
+		System.out.println("saving "+au);
+		service.save(au);
+		String uidStr = au.getId().toString();
+		UUID uid = UUID.fromString(uidStr);
+		AuthTech saved = service.getById(uid);
+		Assert.assertNotNull("uidString convert failed",saved);
+		
+		uid = UUID.fromString(uidStr.toUpperCase());
+		AuthTech saved2 = service.getById(uid);
+		Assert.assertNotNull("uidString convert failed",saved2);
+		
+	}
+//	
+//	@Test
+//	public void testValidateUuid(){
+//		System.out.println("testValidateUuid()");
+//		UUID uid = UUID.randomUUID();
+//		AuthTech au = new AuthTech();
+//		au.setId(uid);
+//		au.setOwnerId(ownerId);
+//		System.out.println("saving "+au);
+//		service.save(au);
+//		String uidStr = uid.toString().toUpperCase();
+//		System.out.println("validate uuid["+uidStr+"]");
+//		uid = UUID.fromString(uidStr);
+//		
+//		AuthTechValidateResult rs = service.validateAuthTech(uid);
+//		Assert.assertTrue("validate error - should success", rs == AuthTechValidateResult.Success);
+//		AuthTech saved = service.getById(uid);
+//		System.out.println("after validate "+saved);
+//		
+//		AuthTechValidateResult rs2 = service.validateAuthTech(uid);
+//		Assert.assertTrue("validate error - should been validated", rs2 == AuthTechValidateResult.HasValidated);
+//		
+//		uid = UUID.randomUUID();
+//		System.out.println("test a random uuid "+uid);
+//		AuthTechValidateResult rs3 = service.validateAuthTech(uid);
+//		Assert.assertTrue("validate error - should fail", rs3 == AuthTechValidateResult.Fail);
+//		
+//	}
+	@Test
+	public void testListUuid(){
+		System.out.println("testListUuid()");		
+		boolean filterValidated = true;
+		List<AuthTech> filtered = service.getByOwnerIdAndValidated(ownerId,filterValidated );
+		Assert.assertNotNull("get null for filtered list",filtered);
+		Assert.assertNull("filtered UUID incorrect", filtered.get(0).getDateUpdate()); 
+		
+		List<AuthTech>  total = service .getByOwnerId(ownerId);
+		Assert.assertTrue("not in total", total.containsAll(filtered));
+	}
+}

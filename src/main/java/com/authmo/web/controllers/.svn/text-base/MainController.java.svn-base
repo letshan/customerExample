@@ -1,0 +1,74 @@
+package com.authmo.web.controllers;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+import com.authmo.entities.TestTable; 
+import com.authmo.service.TestTableService;  
+
+//@Controller
+//has deperacated
+public class MainController {
+//    @Autowired
+//	private TestTableService service;
+//	
+//    @RequestMapping(value = "/")
+//    public String home(Model model) {
+//        TestTable tb = new TestTable();
+//        model.addAttribute("table", tb);
+//        return "index";
+//    }
+//    
+//    @RequestMapping(value = "/commit", method = RequestMethod.POST)
+//    public String handleLogin(@ModelAttribute("table") TestTable test, Model model) {
+//        String message = "";
+//        if (test.getId()>1) {
+//            message = "Welcome back table "+test.getTitle()+" !";
+//        } else {
+//            message = "New Table accessed ["+test.getTitle()+"]!";
+//        }
+//        if(service!=null){
+//        	service.saveOrUpdate(test);        	
+//        }
+//        model.addAttribute("message", message);
+//        return "result";
+//    }
+ 
+	
+	@RequestMapping({"/","/index"})
+	public String home(Model model) 
+	{
+		return "welcome";
+	}
+	@RequestMapping("/welcome")
+	public String welcome(Model model) 
+	{
+		return "welcome";
+	}
+	
+	@RequestMapping(value="/login", method = RequestMethod.GET)
+	public String login(ModelMap model) {
+		return "login";
+	}
+
+	
+	@RequestMapping({ "/authtech","/authtech/" })
+    public String authtech(Model model) {
+    	model.addAttribute("authtechform", new AuthTechValidateForm());
+    	return "authtech";
+    }
+	@RequestMapping({"/admin","/admin/","/admin/index","/admin/adminhome"})
+	public String adminhome(Model model) 
+	{
+		//List<User> blogs = userService.findAllUsers();
+		//model.addAttribute("USERS", blogs);
+		return "admin/adminhome";
+	}
+}

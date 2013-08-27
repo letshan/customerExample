@@ -1,0 +1,102 @@
+package com.authmo.service;
+
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.authmo.entities.AuthTech;
+import com.authmo.entities.AuthTechValidateResult;
+import com.authmo.entities.OwnerStore;
+import com.authmo.repository.AuthTechDao;
+import com.authmo.repository.OwnerStoreDao;
+import com.authmo.web.config.Config;
+
+@Service("authTechService")
+public class AuthTechService {
+	@Autowired
+	private AuthTechDao authTechDao;
+	@Autowired
+	private OwnerStoreDao ownerDao;
+	@Autowired
+	private Config config;
+	public AuthTech getById(UUID id){
+		return (AuthTech) authTechDao.getById(id);
+	}
+	public List<AuthTech> getByOwnerId(int ownerId){
+		return this.getByOwnerIdAndValidated(ownerId,false);
+	}
+	public List<AuthTech> getByOwnerIdAndValidated(int ownerId, boolean filterValidated){
+		return authTechDao.getByOwnerIdAndValidated(ownerId,filterValidated);
+	}
+	/***
+	 * validate the uuid, if success then mark it in the database
+	 * @param uid
+	 * @return
+	 */
+	public AuthTechValidateResult validateAuthTech(UUID uid,boolean delay){
+		AuthTech au = (AuthTech) authTechDao.getById(uid);
+		if(au!=null){
+			long currentUTCTime =System.currentTimeMillis();
+			if(au.getDateUpdate()==null){ 
+				Timestamp tm = new Timestamp(currentUTCTime);				
+				au.setDateUpdate(tm);
+				authTechDao.update(au);
+				return AuthTechValidateResult.Success;
+			}else{
+				if(delay){
+					// for qr code sometime the reader will query the url first then give it to the user
+					long validateAcceptTime = config.getValue(config.Validate_Accept_Time, 60); 
+					if(currentUTCTime - au.getDateUpdate().getTime()<=validateAcceptTime *1000){
+						return AuthTechValidateResult.Success;
+					} 
+				}
+				return AuthTechValidateResult.HasValidated;
+			}
+			
+		}else{
+			return AuthTechValidateResult.Fail;
+		}
+	}
+	public List<UUID> generateUUID(int count){
+		if(count >0){
+		List<UUID> list = new ArrayList<UUID>(count);
+			for(int i=0; i<count;i++){
+				list.add(UUID.randomUUID());
+			}
+			return list;
+		}else{
+			return null;
+		}
+	}
+	public List<AuthTech> saveGeneratedAuthTechs(int ownerId,List<UUID> uids){
+		OwnerStore store = (OwnerStore) ownerDao.getById(ownerId);
+		List<AuthTech> list = new ArrayList<AuthTech>();
+		if(store!=null){
+			AuthTech au = null; 
+			for(UUID uid: uids){
+				au = new AuthTech();
+				au.setId(uid);
+				au.setOwnerId(ownerId);				
+				au.setMaskedCode(store.getMasking().mask(uid.toString()));
+				authTechDao.create(au);
+				list.add(au);
+			}
+		}
+		return list;
+	}
+	
+	public void save(AuthTech au){
+		if(au!=null && au.getId()!=null&&au.getOwnerId()>0){
+			AuthTech old = (AuthTech) authTechDao.getById(au.getId());
+			if(old!=null){
+				authTechDao.update(au);
+			}else{
+				authTechDao.create(au);
+			} 
+		} 
+	}
+}

@@ -1,0 +1,63 @@
+package com.authmo.entities;
+
+import java.io.Serializable;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import com.authmo.masking.Masking;
+import com.authmo.masking.MaskingFactory;
+
+@Entity
+@Table(name = "ownerstore")
+public class OwnerStore implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7408105802709831898L;
+	private Integer id;
+	private String name;
+	private String skin;
+	private String authtechName;
+	@Id
+	@Column(name="Id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	public Integer getId() {
+		return id;
+	}
+	public void setId(Integer id) {
+		this.id = id;
+	}
+	@Column(name="name")
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	@Column(name="skin")
+	public String getSkin() {
+		return skin;
+	}
+	public void setSkin(String skin) {
+		this.skin = skin;
+	}
+	@Column(name="authtech_name") 
+	public String getAuthtechName() {
+		return authtechName;
+	}
+	public void setAuthtechName(String authtechName) {
+		this.authtechName = authtechName;
+	}
+	
+	@Transient
+	public Masking getMasking(){
+		return MaskingFactory.getInstance().getDefaultMasking();
+	}
+}

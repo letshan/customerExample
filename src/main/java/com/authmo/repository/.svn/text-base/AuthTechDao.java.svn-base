@@ -1,0 +1,34 @@
+package com.authmo.repository;
+
+import java.util.List;
+
+import javax.persistence.Query;
+
+import com.authmo.entities.AuthTech;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+@Repository
+@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+public class AuthTechDao extends AbstractJpaDAO<AuthTech>  {
+  public AuthTechDao(){
+	  super(AuthTech.class);
+  }
+
+	public List<AuthTech> getByOwnerId(int ownerId){
+		String queryStr = "from AuthTech where ownerId=:ownerId";
+		Query query = getEntityManager().createQuery(queryStr);
+		query.setParameter("ownerId",ownerId);
+		return (List<AuthTech>)query.getResultList();		
+	}
+	public List<AuthTech> getByOwnerIdAndValidated(int ownerId, boolean filterValidated){
+		String queryStr = "from AuthTech where ownerId=:ownerId";
+		if(filterValidated){
+			queryStr += " and dateUpdate is null";
+		}
+		Query query = getEntityManager().createQuery(queryStr);
+		query.setParameter("ownerId",ownerId);
+		return (List<AuthTech>)query.getResultList();		
+	}
+}

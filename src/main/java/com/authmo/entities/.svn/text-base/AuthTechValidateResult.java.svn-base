@@ -1,0 +1,7 @@
+package com.authmo.entities;
+
+public enum AuthTechValidateResult {
+	Success,
+	Fail,
+	HasValidated
+}

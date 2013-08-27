@@ -1,0 +1,315 @@
+package com.authmo.web.controllers;
+
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.List;
+import java.util.UUID;
+import java.util.TimeZone;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import javax.annotation.PostConstruct;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.http.MediaType;
+import org.springframework.http.server.ServletServerHttpResponse;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import net.tanesha.recaptcha.ReCaptcha;
+import net.tanesha.recaptcha.ReCaptchaFactory;
+import net.tanesha.recaptcha.ReCaptchaImpl;
+import net.tanesha.recaptcha.ReCaptchaResponse;
+
+import com.authmo.entities.AuthTech;
+import com.authmo.entities.AuthTechValidateResult;
+import com.authmo.entities.OwnerStore; 
+import com.authmo.masking.Masking;
+import com.authmo.masking.MaskingFactory;
+import com.authmo.service.AuthTechService;
+import com.authmo.service.OwnerStoreService;
+import com.authmo.utils.StringUtil;
+import com.authmo.utils.TimeZoneUtils;
+import com.authmo.web.IpBlackList;
+import com.authmo.web.UserAccess;
+import com.authmo.web.UserContext;
+import com.authmo.web.config.Config;
+import com.authmo.web.config.ConfigException;
+import com.authmo.web.response.QRCodeMessageConverter;
+import com.authmo.web.response.QRCodeResponse;
+
+@Controller
+//@RequestMapping(value = "/authtech")
+public class AuthTechController {
+	@Autowired
+	Config config;
+	private final String Recaptcha_Challenge_Field = "recaptcha_challenge_field";
+	private final String Recaptcha_Response_Field = "recaptcha_response_field";
+ 
+    @Autowired
+    private AuthTechService service;
+    @Autowired
+    private OwnerStoreService ownerSvc;
+    @Autowired
+    private UserAccess userAccess;
+    @Autowired
+    private UserContext userContext;
+ 
+    private IpBlackList ipList = IpBlackList.getInstance();
+    
+    private int ownerId =1;
+     
+    private String publicKeyString;
+    private String privateKeyString;
+    
+    @PostConstruct
+    public void init() throws ConfigException{
+    	publicKeyString = config.getValue(config.Recaptcha_PublicKey);
+    	privateKeyString = config.getValue(config.Recaptcha_PrivateKey);
+    }
+    
+    @RequestMapping({ "/index","/","/authtech","/authtech/" })
+    public String home(Model model) {
+    	model.addAttribute("authtechform", new AuthTechValidateForm());
+    	setSkin(model,null,AuthTechValidateResult.Fail,false);
+    	return "authtech";
+    }
+    @RequestMapping(value="/login", method = RequestMethod.GET)
+	public String login(ModelMap modelMap, Model model) {
+    	setSkin(model,null,AuthTechValidateResult.Fail,false);
+		return "login";
+	}
+
+    @RequestMapping(value = "/commit", method = RequestMethod.POST)
+    public String handleValidate(@ModelAttribute("authtechform") AuthTechValidateForm form, HttpServletRequest request,Model model ){    	
+    	String uuidStr =form.getAuthtechStr();
+    	return authtechValidate(uuidStr, request,model,false); 
+    }
+    @RequestMapping(value = "/commit", method = RequestMethod.GET)
+    public String handleValidate(@RequestParam String verifycode, HttpServletRequest request,Model model ){ 
+    	return "mobile/"+authtechValidate(verifycode, request,model,true); 
+    }
+    
+    private String authtechValidate(String verifycode, HttpServletRequest request,Model model, boolean isMobileAccess ){
+    	Masking mask = MaskingFactory.getInstance().getDefaultMasking();
+    	UUID uuid = null;
+    	try{
+    		String uuidStr = mask.unmask(StringUtil.trim(verifycode));
+    		if(!StringUtil.isEmpty(uuidStr)){
+    			uuid = UUID.fromString(uuidStr);
+    		}
+    	}catch(IllegalArgumentException ex){    	
+    	}
+    	String message = null;
+    	if(userAccess.getFailedTimes()>6){
+    		message = "authtech.message.banned";
+    		ipList.addIpToBlackList(request.getRemoteAddr()); 
+    		model.addAttribute("message", message);
+    		setSkin(model,uuid,AuthTechValidateResult.Fail, isMobileAccess);
+    		userAccess.clean();
+    		return "validate/failed";
+    	}
+    	String returnTo = "authtech";
+    	if(!checkCaptcha(request)){
+    		model.addAttribute("message","authtech.message.recaptcha.incorrect");
+    		userAccess.setFailedTimes(userAccess.getFailedTimes()+1);
+    		model.addAttribute("recaptcha",generateCaptcha());
+    		setSkin(model,uuid,AuthTechValidateResult.Fail, isMobileAccess);
+    		return returnTo;
+    	}
+    	AuthTechValidateResult rs = service.validateAuthTech(uuid, isMobileAccess);
+    	switch(rs){
+	    	case Fail:
+	    		message = "authtech.message.fail";
+	    		userAccess.setFailedTimes(userAccess.getFailedTimes()+1); 
+	    		setSkin(model,uuid,AuthTechValidateResult.Fail, isMobileAccess);
+	    		if(userAccess.getFailedTimes()>3){
+	    			model.addAttribute("recaptcha",generateCaptcha());
+	    			userAccess.setCaptchaRequired(true);
+	    		}
+	    		if(isMobileAccess){
+	    			model.addAttribute("messageDetail", "authtech.mobile.messageDetail.fail");
+	    			returnTo = "validate/failed";
+	    		}else{
+	    			model.addAttribute("messageDetail", "authtech.messageDetail.fail");
+	    		}
+	    		break;
+	    	case HasValidated:
+	    		//message = "Warning: this Genuee Code has already been validated";
+	    		message = "authtech.message.validated";
+	    		model.addAttribute("authtech", service.getById(uuid));
+	    		DateFormat sdf = userContext.getClientTimeFormat(config.getValue(config.DateFormatStyle, DateFormat.MEDIUM),
+	    				config.getValue(config.TimeFormatStyle, DateFormat.LONG));
+	    		model.addAttribute("tzFormat", sdf);
+	    		setSkin(model,uuid,AuthTechValidateResult.HasValidated, isMobileAccess);
+	    		model.addAttribute("messageDetail", "authtech.messageDetail.validated");
+	    		returnTo = "validate/expired";
+	    		break;
+	    	case Success:
+	    		message = "authtech.message.success";
+	    		model.addAttribute("messageDetail", "authtech.messageDetail.success");
+	    		setSkin(model,uuid,AuthTechValidateResult.Success, isMobileAccess);
+	    		returnTo = "validate/successed";
+	    		break;
+    	}
+    	model.addAttribute("message", message);
+		return returnTo;
+    }
+    
+    private void setSkin(Model model, UUID uuid, AuthTechValidateResult rs, boolean isMobileAccess) {
+    	if(rs!= AuthTechValidateResult.Fail && uuid !=null){
+    		AuthTech au = service.getById(uuid);
+    		OwnerStore store = ownerSvc.getById(au.getOwnerId());
+    		if(store!=null&& !StringUtil.isEmpty(store.getSkin())){
+    			model.addAttribute("skin", "skins/"+store.getSkin()+"/");//customed skin
+        		model.addAttribute("authtechName",store.getAuthtechName());
+        		model.addAttribute("bodyfooter_copy", (isMobileAccess?"mobile.copyright":"default.copyright")+"."+store.getSkin());
+        		return;
+    		}
+    	}
+		model.addAttribute("skin", getDefaultSkin(isMobileAccess));//default skin
+		model.addAttribute("authtechName", getDefaultAuthTechName(isMobileAccess));
+		model.addAttribute("bodyfooter_copy", isMobileAccess?"mobile.copyright":"default.copyright");
+    	 
+	}
+
+	private String getDefaultSkin(boolean isMobileAccess) { 
+			if(isMobileAccess){
+				return config.getValue(config.Mobile_Setting,config.Skin,"");
+			}
+			else{ return config.getValue(config.Default_Setting,config.Skin,"");} 
+		 
+	}
+	private String getDefaultAuthTechName(boolean isMobileAccess) { 
+		if(isMobileAccess){
+			return config.getValue(config.Mobile_Setting,config.AuthTechName,"");
+		}
+		else{ return config.getValue(config.Default_Setting,config.AuthTechName,"");} 
+	}
+
+	/***
+     * check if the commit need a captcha validation; if it needs, check if the captcha is validated.
+     * @param request
+     * @return if no validation is required return true;
+     * 			if validation passed, return true;
+     * 			if validation is required and failed to pass, return false.
+     */
+    private boolean checkCaptcha(HttpServletRequest request) {
+    	if(userAccess.getCaptchaRequired()){
+    		   String remoteAddr = request.getRemoteAddr();
+    	        ReCaptchaImpl reCaptcha = new ReCaptchaImpl();
+    	        reCaptcha.setPrivateKey(privateKeyString);
+
+    	        String challenge = request.getParameter(Recaptcha_Challenge_Field );
+    	        String uresponse = request.getParameter(Recaptcha_Response_Field);
+    	        if(challenge!=null && uresponse!=null){
+	    	        ReCaptchaResponse reCaptchaResponse = reCaptcha.checkAnswer(remoteAddr, challenge, uresponse);	    	        
+	    	        return reCaptchaResponse.isValid();
+    	        }else{
+    	        	return false;
+    	        }
+    	}else{
+    		return true;
+    	}
+	}
+	private String generateCaptcha(){
+    	ReCaptcha c = ReCaptchaFactory.newReCaptcha(publicKeyString, privateKeyString, false);
+    	return c.createRecaptchaHtml(null, null);
+    }
+	
+	/****
+	 * generate qr code for authtech code
+	 * this is a request/response service, can be published
+	 * @param authtechCode
+	 * @param outputMessage
+	 * @param session
+	 * @throws IOException
+	 */
+	@RequestMapping(value = "/authtech_qrcode/{authtechCode}", method = RequestMethod.GET)
+	 public void getQRCode(@PathVariable String authtechCode,HttpServletResponse outputMessage,HttpSession session) throws IOException {
+		QRCodeMessageConverter convert= new QRCodeMessageConverter();  
+		String baseUrl = config.getValue(config.QRCode_BaseURL, "http://localhost:8080/");
+		int size = config.getValue(config.QRCode_Size,"big",150);
+		String fileType = config.getValue(config.QRCode_FileType,"png");
+		QRCodeResponse response = new QRCodeResponse(baseUrl+"?verifycode="+authtechCode,size,fileType);
+		convert.write(response, MediaType.IMAGE_PNG, new ServletServerHttpResponse(outputMessage));
+	}
+}
+class AuthTechValidateForm{
+	private String authtechStr;
+
+	public String getAuthtechStr() {
+		return authtechStr;
+	}
+
+	public void setAuthtechStr(String authtechStr) {
+		this.authtechStr = authtechStr;
+	}
+	
+}
+class AuthTechValidateForm1{
+	
+	private String authtechStr_first;
+	private String authtechStr_f2;
+	private String authtechStr_f3;
+	private String authtechStr_f4;
+	public String getAuthtechStr_f2() {
+		return authtechStr_f2;
+	}
+
+	public void setAuthtechStr_f2(String authtechStr_f2) {
+		this.authtechStr_f2 = authtechStr_f2;
+	}
+
+	public String getAuthtechStr_f3() {
+		return authtechStr_f3;
+	}
+
+	public void setAuthtechStr_f3(String authtechStr_f3) {
+		this.authtechStr_f3 = authtechStr_f3;
+	}
+
+	public String getAuthtechStr_f4() {
+		return authtechStr_f4;
+	}
+
+	public void setAuthtechStr_f4(String authtechStr_f4) {
+		this.authtechStr_f4 = authtechStr_f4;
+	}
+
+	public String getAuthtechStr_last() {
+		return authtechStr_last;
+	}
+
+	public void setAuthtechStr_last(String authtechStr_last) {
+		this.authtechStr_last = authtechStr_last;
+	}
+
+	private String authtechStr_last;
+
+	public String getAuthtechStr_first() {
+		return authtechStr_first;
+	}
+
+	public void setAuthtechStr_first(String authtechStr) {
+		this.authtechStr_first = authtechStr;
+	}
+	
+	public String getAuthtechStr(){
+		return new StringBuilder().append(authtechStr_first).append('-')
+				.append(authtechStr_f2).append('-').append(authtechStr_f3).append('-')
+				.append(authtechStr_f4).append('-').append(authtechStr_last).toString();
+	}
+	
+}
